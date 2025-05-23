@@ -1,1 +1,2 @@
-from wsgi import app
+# index.py
+# This file is not used by the project.
