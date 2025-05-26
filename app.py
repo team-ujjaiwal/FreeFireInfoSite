@@ -130,20 +130,6 @@ def cached_endpoint(ttl=300):
         return wrapper
     return decorator
 
-API_KEY = "1yearkeysforujjaiwal"
-
-# === API Key Decorator ===
-def require_api_key():
-    def decorator(fn):
-        @wraps(fn)
-        def wrapper(*args, **kwargs):
-            key = request.args.get('key') or request.headers.get('X-API-KEY')
-            if key != API_KEY:
-                return jsonify({'error': 'Unauthorized. Invalid or missing API key.'}), 401
-            return fn(*args, **kwargs)
-        return wrapper
-    return decorator
-
 # === Flask Routes ===
 @app.route('/player-info')
 @cached_endpoint()
