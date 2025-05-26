@@ -50,9 +50,9 @@ def get_account_credentials(region: str) -> str:
     if r == "IND":
         return "uid=3939412237&password=74C35008C7E8BE5B618F6B482EC73D840F863E2AF750C1317CA66D4CD74F19FB"
     elif r in {"BR", "US", "SAC", "NA"}:
-        return "uid=3301387397&password=BAC03CCF677F8772473A09870B6228ADFBC1F503BF59C8D05746DE451AD67128"
+        return "uid=3939493997&password=D08775EC0CCCEA77B2426EBC4CF04C097E0D58822804756C02738BF37578EE17"
     else:
-        return "uid=3301239795&password=DD40EE772FCBD61409BB15033E3DE1B1C54EDA83B75DF0CDD24C34C7C8798475"
+        return "uid=3939507748&password=55A6E86C5A338D133BAD02964EFB905C7C35A86440496BC210A682146DCE9F32"
 
 # === Token Generation ===
 async def get_access_token(account: str):
@@ -127,6 +127,20 @@ def cached_endpoint(ttl=300):
             res = fn(*a, **k)
             cache[key] = res
             return res
+        return wrapper
+    return decorator
+
+API_KEY = "1yearkeysforujjaiwal"
+
+# === API Key Decorator ===
+def require_api_key():
+    def decorator(fn):
+        @wraps(fn)
+        def wrapper(*args, **kwargs):
+            key = request.args.get('key') or request.headers.get('X-API-KEY')
+            if key != API_KEY:
+                return jsonify({'error': 'Unauthorized. Invalid or missing API key.'}), 401
+            return fn(*args, **kwargs)
         return wrapper
     return decorator
 
